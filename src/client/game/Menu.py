@@ -5,7 +5,11 @@ from Const import *
 class MainMenu:
     def __init__(self):
         self.PlayerNameInput = ""
+        self.BallImagePath = ""
+        self.ServerInput = ""
+        self.PortInput = ""
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
+        self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
         self.menu.add.text_input('Name :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Server :', default='', onchange=self.ServerValue)
         self.menu.add.text_input('Port :', default='', onchange=self.PortValue)
@@ -14,7 +18,15 @@ class MainMenu:
 
     def start_the_game(self):
         game = Game()
-        game.partie(self.PlayerNameInput)
+        game.partie(self.PlayerNameInput, self.BallImagePath)
+
+    def set_ball(self, name, value):
+        print(value)
+        if value == 1:
+            self.BallImagePath = "./src/asset/Balles/jo.png"
+        if value == 2:
+            self.BallImagePath = "./src/asset/Balles/mounira.png"
+
 
     def NameValue(self, name):
         self.PlayerNameInput = name
