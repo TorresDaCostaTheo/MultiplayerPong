@@ -77,17 +77,19 @@ def main():
             player1Score += 1
         elif point == 1:
             player2Score += 1
+            print(player2Score)
+
+        if player1Score == 10 or player2Score == 10 :
+            ecran.set_menu_title('Fin')
+            ecran.setup_menus_fin()
+            ecran.run()
+    
 
         # Someone has scored
         # a point and the ball is out of bounds.
         # So, we reset its position
         if point: 
             ball.reset()
-        
-        if player1Score == 10 or player2Score == 10 :
-             ecran.set_menu_title('Fin')
-             ecran.setup_menus_fin()
-             ecran.run()
                 
         # Displaying the objects on the screen
         player1.display()
