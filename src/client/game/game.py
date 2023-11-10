@@ -78,7 +78,7 @@ class Game:
             # Affichage des scores des joueurs
             player1.displayScore(f"{player_name} : ",
                                 player1Score, 100, 20, WHITE)
-            player2.displayScore("player_2 : ",
+            player2.displayScore("Player_2 : ",
                                 player2Score, WIDTH-100, 20, WHITE)
 
             pygame.display.update()
