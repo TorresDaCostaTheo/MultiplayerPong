@@ -77,7 +77,6 @@ def main():
             player1Score += 1
         elif point == 1:
             player2Score += 1
-            print(player2Score)
 
         if player1Score == 10 or player2Score == 10 :
             ecran.set_menu_title('Fin')
@@ -119,6 +118,7 @@ class Game:
         player1 = Striker(20, 0, 10, 100, 10, GREEN)
         player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED)
         ball = Ball(WIDTH//2, HEIGHT//2, 7, 7, WHITE)
+        ecran = Ecran(900, 650, '', 400, 300, pygame_menu.themes.THEME_DARK)
 
         listOfplayers = [player1, player2]
 
@@ -146,6 +146,10 @@ class Game:
                         player1YFac = -1
                     if event.key == pygame.K_s:
                         player1YFac = 1
+                    if event.key == pygame.K_ESCAPE:
+                        ecran.set_menu_title('Pause')
+                        ecran.setup_menus_pause()
+                        ecran.run()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         player2YFac = 0
@@ -172,6 +176,11 @@ class Game:
                 player1Score += 1
             elif point == 1:
                 player2Score += 1
+            
+            if player1Score == 10 or player2Score == 10 :
+                ecran.set_menu_title('Fin')
+                ecran.setup_menus_fin()
+                ecran.run()
 
             # Quelqu'un a marqué
             # un point et la balle est hors limites.

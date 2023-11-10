@@ -1,20 +1,36 @@
 import pygame_menu
 from game import Game
-from Const import *
+from Const import * 
+from socket.ClientSocketModule import ClientSocket
+
 
 class MainMenu:
     def __init__(self):
         self.PlayerNameInput = ""
+        self.ServerInput=""
+        self.PortInput=0
+
+        
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.text_input('Name :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Server :', default='', onchange=self.ServerValue)
         self.menu.add.text_input('Port :', default='', onchange=self.PortValue)
+
         self.menu.add.button('Jouer', self.start_the_game)
         self.menu.add.button('Quitter', pygame_menu.events.EXIT)
 
     def start_the_game(self):
+        self.connectClient(self.PlayerNameInput,self.ServerInput,self.PortInput)
         game = Game()
         game.partie(self.PlayerNameInput)
+
+    def connectClient(self, username, server, port):
+        self.client = ClientSocket(username, server, int(port), self.callBackMessage)
+        self.client.connect()
+
+
+    def callBackMessage(self, message):
+        print(message)
 
     def NameValue(self, name):
         self.PlayerNameInput = name
