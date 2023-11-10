@@ -56,14 +56,14 @@ class Game:
             for player in listOfplayers:
                 if pygame.Rect.colliderect(ball.getRect(), player.getRect()):
                     ball.hit()
-
-            # Updating the objects
-		        player1.update(player1YFac)
-		        #player1.sendStrikerToServer(sock)
-		        player2.update(player2YFac)
-		        #player2.sendStrikerToServer(sock)
-		        point = ball.update()
-		        #ball.sendBallToServer(sock)
+                    
+                    
+            player1.update(player1YFac)
+            #player1.sendStrikerToServer(sock)
+            player2.update(player2YFac)
+            #player2.sendStrikerToServer(sock)
+            point = ball.update()
+            #ball.sendBallToServer(sock)
 
             # -1 -> player_1 a marqué
             # +1 -> player_2 a marqué
