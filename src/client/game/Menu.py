@@ -9,8 +9,8 @@ class MainMenu:
         self.menu.add.text_input('Name :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Server :', default='', onchange=self.ServerValue)
         self.menu.add.text_input('Port :', default='', onchange=self.PortValue)
-        self.menu.add.button('Play', self.start_the_game)
-        self.menu.add.button('Quit', pygame_menu.events.EXIT)
+        self.menu.add.button('Jouer', self.start_the_game)
+        self.menu.add.button('Quitter', pygame_menu.events.EXIT)
 
     def start_the_game(self):
         game = Game()
