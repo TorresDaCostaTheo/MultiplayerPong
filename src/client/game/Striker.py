@@ -42,4 +42,9 @@ class Striker:
 		screen.blit(text, textRect)
 
 	def getRect(self):
+
 		return self.playerRect
+	
+	def sendStrikerToServer(self,sock):
+		strikerJson=json.dumps(self.__dict__)
+		sock.send(strikerJson.encode())
