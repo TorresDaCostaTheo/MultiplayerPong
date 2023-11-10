@@ -10,13 +10,13 @@ class Game:
         pygame.display.set_caption("Pong")
         self.clock = pygame.time.Clock()
 
-    def partie(self, player_name):
+    def partie(self, player_name, BallImage):
         running = True
 
         # Initialisation des objets
-        player1 = Striker(20, 0, 10, 100, 10, GREEN)
-        player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED)
-        ball = Ball(WIDTH//2, HEIGHT//2, 7, 7, WHITE)
+        player1 = Striker(20, 0, 40, 100, 10, GREEN, StrikerGaucheImagePath)
+        player2 = Striker(WIDTH-50, 0, 40, 100, 10, RED, StrikerDroitImagePath)
+        ball = Ball(WIDTH//2, HEIGHT//2, 50, 60, WHITE, BallImage)
 
         listOfplayers = [player1, player2]
 
@@ -87,5 +87,5 @@ class Game:
 # Si vous exécutez le jeu en tant que script principal
 if __name__ == "__main__":
     game_instance = Game()
-    game_instance.partie("Player_1")
+    game_instance.partie("Player_1", "./src/jo.png")
     pygame.quit()
