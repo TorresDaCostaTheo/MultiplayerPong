@@ -2,6 +2,7 @@ import pygame
 from Const import *
 
 class Striker:
+  
     def __init__(self, posx, posy, width, height, speed, color, image_path):
         self.posx = posx
         self.posy = posy
@@ -35,3 +36,7 @@ class Striker:
 
     def getRect(self):
         return self.playerRect
+      
+    def sendStrikerToServer(self,sock):
+        strikerJson=json.dumps(self.__dict__)
+        sock.send(strikerJson.encode())

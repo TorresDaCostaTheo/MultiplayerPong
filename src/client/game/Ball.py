@@ -1,7 +1,9 @@
 import pygame
+import json
 from Const import *
 
 class Ball:
+
     def __init__(self, posx, posy, radius, speed, color, BallImagePath):
         self.posx = posx
         self.posy = posy
@@ -51,3 +53,7 @@ class Ball:
 
     def getRect(self):
         return self.rect
+      	
+	  def sendBallToServer(self,sock):
+        ballJson=json.dumps(self.__dict__)
+        sock.send(ballJson.encode())
