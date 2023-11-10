@@ -54,6 +54,6 @@ class Ball:
     def getRect(self):
         return self.rect
       	
-	  def sendBallToServer(self,sock):
+    def sendBallToServer(self,sock):
         ballJson=json.dumps(self.__dict__)
         sock.send(ballJson.encode())

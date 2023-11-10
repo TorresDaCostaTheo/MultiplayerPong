@@ -1,10 +1,8 @@
 import pygame
-import pygame_menu
-import socket
 from Const import *
 from Striker import Striker
 from Ball import Ball
-from ecran import Ecran
+
 
 class Game:
     def __init__(self):
@@ -35,29 +33,25 @@ class Game:
         while running:
             self.screen.fill(BLACK)
 
-                   # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    player2YFac = -1
-                if event.key == pygame.K_DOWN:
-                    player2YFac = 1
-                if event.key == pygame.K_z:
-                    player1YFac = -1
-                if event.key == pygame.K_s:
-                    player1YFac = 1
-                if event.key == pygame.K_ESCAPE:
-                    ecran.set_menu_title('Pause')
-                    ecran.setup_menus_pause()
-                    ecran.run()
-                    
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    player2YFac = 0
-                if event.key == pygame.K_z or event.key == pygame.K_s:
-                    player1YFac = 0
+            # Event handling
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        player2YFac = -1
+                    if event.key == pygame.K_DOWN:
+                        player2YFac = 1
+                    if event.key == pygame.K_z:
+                        player1YFac = -1
+                    if event.key == pygame.K_s:
+                        player1YFac = 1
+                        
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                        player2YFac = 0
+                    if event.key == pygame.K_z or event.key == pygame.K_s:
+                        player1YFac = 0
 
             # Détection des collisions
             for player in listOfplayers:
@@ -80,10 +74,6 @@ class Game:
             elif point == 1:
                 player2Score += 1
                 
-            if player1Score == 10 or player2Score == 10 :
-                ecran.set_menu_title('Fin')
-                ecran.setup_menus_fin()
-                ecran.run()
 
             # Quelqu'un a marqué
             # un point et la balle est hors limites.
@@ -106,5 +96,5 @@ class Game:
 # Si vous exécutez le jeu en tant que script principal
 if __name__ == "__main__":
     game_instance = Game()
-    game_instance.partie("Player_1", "./src/jo.png")
+    game_instance.partie("Player_1", "./src/asset/Balles/jo.png")
     pygame.quit()

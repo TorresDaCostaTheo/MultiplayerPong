@@ -14,8 +14,8 @@ WIDTH, HEIGHT = 900, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pong")
 
-StrikerDroitImagePath = "./src/mainDroite.png"
-StrikerGaucheImagePath = "./src/mainGauche.png"
+StrikerDroitImagePath = "./src/asset/Strikers/mainDroite.png"
+StrikerGaucheImagePath = "./src/asset/Strikers/mainGauche.png"
 clock = pygame.time.Clock() 
 FPS = 60
 

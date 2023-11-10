@@ -1,4 +1,5 @@
 import pygame
+import json
 from Const import *
 
 class Striker:
