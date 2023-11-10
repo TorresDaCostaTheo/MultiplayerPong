@@ -1,4 +1,5 @@
 import pygame
+import socket
 from Const import *
 from Striker import Striker
 from Ball import Ball
@@ -19,6 +20,11 @@ def main():
 	# Initial parameters of the players
 	player1Score, player2Score = 0, 0
 	player1YFac, player2YFac = 0, 0
+
+	#init socket
+	# Créer un socket et se connecter à un serveur
+	#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	#sock.connect(("127.0.0.1", 5555))
 
 	while running:
 		screen.fill(BLACK)
@@ -49,8 +55,11 @@ def main():
 
 		# Updating the objects
 		player1.update(player1YFac)
+		#player1.sendStrikerToServer(sock)
 		player2.update(player2YFac)
+		#player2.sendStrikerToServer(sock)
 		point = ball.update()
+		#ball.sendBallToServer(sock)
 
 		# -1 -> player_1 has scored
 		# +1 -> player_2 has scored
