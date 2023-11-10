@@ -1,7 +1,9 @@
 import pygame
+import socket
 from Const import *
 from Striker import Striker
 from Ball import Ball
+
 
 class Game:
     def __init__(self):
@@ -12,7 +14,7 @@ class Game:
 
     def partie(self, player_name):
         running = True
-
+  
         # Initialisation des objets
         player1 = Striker(20, 0, 10, 100, 10, GREEN)
         player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED)
@@ -23,7 +25,11 @@ class Game:
         # Paramètres initiaux des joueurs
         player1Score, player2Score = 0, 0
         player1YFac, player2YFac = 0, 0
-
+        
+        # Créer un socket et se connecter à un serveur
+	      #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	      #sock.connect(("127.0.0.1", 5555))
+        
         while running:
             self.screen.fill(BLACK)
 
@@ -51,10 +57,13 @@ class Game:
                 if pygame.Rect.colliderect(ball.getRect(), player.getRect()):
                     ball.hit()
 
-            # Mise à jour des objets
-            player1.update(player1YFac)
-            player2.update(player2YFac)
-            point = ball.update()
+            # Updating the objects
+		        player1.update(player1YFac)
+		        #player1.sendStrikerToServer(sock)
+		        player2.update(player2YFac)
+		        #player2.sendStrikerToServer(sock)
+		        point = ball.update()
+		        #ball.sendBallToServer(sock)
 
             # -1 -> player_1 a marqué
             # +1 -> player_2 a marqué
@@ -85,6 +94,7 @@ class Game:
             self.clock.tick(FPS)
 
 # Si vous exécutez le jeu en tant que script principal
+
 if __name__ == "__main__":
     game_instance = Game()
     game_instance.partie("Player_1")
