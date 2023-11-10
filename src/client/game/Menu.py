@@ -5,6 +5,8 @@ from Const import *
 class MainMenu:
     def __init__(self):
         self.PlayerNameInput = ""
+        self.ServerInput = ""
+        self.PortInput = ""
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.text_input('Name :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Server :', default='', onchange=self.ServerValue)
