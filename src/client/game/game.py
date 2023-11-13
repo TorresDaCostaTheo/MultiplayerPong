@@ -18,9 +18,9 @@ class Game:
     def partie(self, player_name):
         running = True
 
-        player1 = Striker(20, 0, 10, 100, 10, GREEN)
-        player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED)
-        ball = Ball(WIDTH//2, HEIGHT//2, 7, 7, WHITE)
+        player1 = Striker(20, 0, 10, 100, 10, GREEN,"./src/asset/Strikers/mainDroite.png")
+        player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED,"./src/asset/Strikers/mainGauche.png")
+        ball = Ball(WIDTH//2, HEIGHT//2, 7, 7, WHITE, "./src/asset/Balles/jo.png")
         ecran = Ecran(900, 650, '', 400, 300, pygame_menu.themes.THEME_DARK)
 
         listOfplayers = [player1, player2]
