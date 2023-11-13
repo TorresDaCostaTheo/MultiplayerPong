@@ -12,10 +12,12 @@ class Ball:
         self.color = color
         self.xFac = 1
         self.yFac = -1
-        self.image = pygame.image.load(BallImagePath)
-        self.image = pygame.transform.scale(self.image, (2 * self.radius, 2 * self.radius))
+        self.original_image = pygame.image.load(BallImagePath)
+        self.original_image = pygame.transform.scale(self.original_image, (2 * self.radius, 2 * self.radius))
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect(center=(self.posx, self.posy))
         self.firstTime = 1
+        self.rotation_angle = 0
 
     def display(self):
         screen.blit(self.image, self.rect)
@@ -57,3 +59,8 @@ class Ball:
     def sendBallToServer(self,sock):
         ballJson=json.dumps(self.__dict__)
         sock.send(ballJson.encode())
+    
+    def rotate(self):
+        self.rotation_angle += 5  # Vous pouvez ajuster l'angle de rotation selon vos besoins
+        self.image = pygame.transform.rotate(self.original_image, self.rotation_angle)
+        self.rect = self.image.get_rect(center=self.rect.center)

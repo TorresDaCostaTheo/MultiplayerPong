@@ -8,12 +8,12 @@ from ecran import Ecran
 pygame.init()
 
 class Game:
-    def __init__(self, joueur,):
+    def __init__(self, joueur):
         pygame.init()
         self.joueur = joueur
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Pong")
         self.clock = pygame.time.Clock()
+        self.rotate_ball = False
 
     def partie(self, player_name, BallImage):
         running = True
@@ -43,6 +43,11 @@ class Game:
                         player1YFac = -1
                     if event.key == pygame.K_s:
                         player1YFac = 1
+                    if event.key == pygame.K_c:
+                        self.rotate_ball = True
+                    if event.key == pygame.K_v:
+                        self.rotate_ball = False
+                        
                     if event.key == pygame.K_ESCAPE:
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
@@ -80,6 +85,9 @@ class Game:
             player1.display()
             player2.display()
             ball.display()
+            
+            if self.rotate_ball:
+                ball.rotate()
 
             player1.displayScore(f"{player_name} : ",
                                 player1Score, 100, 20, WHITE)
