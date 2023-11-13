@@ -7,12 +7,14 @@ import json
 class MainMenu:
     def __init__(self):
         self.PlayerNameInput = ""
+        self.BallImagePath = "./src/asset/Balles/jo.png"
         self.ServerInput= ""
         self.PortInput=0
         self.joueur = None
 
         
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
+        self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
         self.menu.add.text_input('Name :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Server :', default='', onchange=self.ServerValue)
         self.menu.add.text_input('Port :', default='', onchange=self.PortValue)
@@ -41,7 +43,7 @@ class MainMenu:
     def start_the_game(self):
         self.connectJoueur(self.PlayerNameInput, self.ServerInput, self.PortInput)
         game = Game(self.joueur)
-        game.partie(self.joueur.username)
+        game.partie(self.joueur.username, self.BallImagePath)
 
     def NameValue(self, name):
         self.PlayerNameInput = name
@@ -51,6 +53,13 @@ class MainMenu:
 
     def PortValue(self, port):
         self.PortInput = port
+
+    def set_ball(self, name, value):
+        print(value)
+        if value == 1:
+            self.BallImagePath = "./src/asset/Balles/jo.png"
+        if value == 2:
+            self.BallImagePath = "./src/asset/Balles/mounira.png"
 
     def run_menu(self):
         self.menu.mainloop(screen)

@@ -8,20 +8,20 @@ from ecran import Ecran
 pygame.init()
 
 class Game:
-    def __init__(self, joueur):
+    def __init__(self, joueur,):
         pygame.init()
         self.joueur = joueur
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Pong")
         self.clock = pygame.time.Clock()
 
-    def partie(self, player_name):
+    def partie(self, player_name, BallImage):
         running = True
 
-        player1 = Striker(20, 0, 10, 100, 10, GREEN,"./src/asset/Strikers/mainDroite.png")
-        player2 = Striker(WIDTH-30, 0, 10, 100, 10, RED,"./src/asset/Strikers/mainGauche.png")
-        ball = Ball(WIDTH//2, HEIGHT//2, 7, 7, WHITE, "./src/asset/Balles/jo.png")
-        ecran = Ecran(900, 650, '', 400, 300, pygame_menu.themes.THEME_DARK)
+        player1 = Striker(20, 0, 40, 100, 10, GREEN, StrikerGaucheImagePath)
+        player2 = Striker(WIDTH-50, 0, 40, 100, 10, RED, StrikerDroitImagePath)
+        ball = Ball(WIDTH//2, HEIGHT//2, 50, 60, WHITE, BallImage)
+        ecran = Ecran(900, 600, '', 400, 300, pygame_menu.themes.THEME_DARK)
 
         listOfplayers = [player1, player2]
 
@@ -64,10 +64,10 @@ class Game:
 
             if point == -1:
                 player1Score += 1
-                self.joueur.send_message(self.joueur.username, player1Score)
+                # self.joueur.send_message(self.joueur.username, player1Score)
             elif point == 1:
                 player2Score += 1
-                self.joueur.send_message(self.joueur.username, player2Score)
+                # self.joueur.send_message(self.joueur.username, player2Score)
 
             if player1Score == 10 or player2Score == 10:
                 ecran.set_menu_title('Fin')
@@ -91,6 +91,6 @@ class Game:
 
 if __name__ == "__main__":
     game_instance = Game("joueur")
-    game_instance.partie("Player_1")
+    game_instance.partie("Player_1", "./src/asset/Balles/jo.png")
     pygame.quit()
 
