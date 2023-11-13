@@ -8,11 +8,15 @@ class Ball:
     def __init__(self,point:Point,speed) -> None:
         self.__point = point
         self.__defaultSpeed:float = speed
+        self.__defaultPoint = point
         self._speed:float = speed
         pass
     def speedUp(self,multiplier):
         if(multiplier < 1):         
            self._speed= self._speed * multiplier
+    def reset(self):
+        self.__point = self.__defaultPoint
+        self._speed = self.__defaultSpeed
     def speedReset(self):
         self._speed = self.__defaultSpeed
     @property
