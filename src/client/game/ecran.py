@@ -14,19 +14,21 @@ class Ecran:
         self.menu_title = new_title
         self.menu.set_title(new_title)
 
-    def setup_menus_pause(self):
+    def setup_menus_pause(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Le jeu est en pause', font_size=20, margin=(0, 20))
+        print(instance_jeu.joueur.username)
             # Add buttons to the menu
-        self.menu.add.button('Reprendre')
+        self.menu.add.button('Reprendre le jeu',instance_jeu.partie, instance_jeu.joueur.username)
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
     
-    def setup_menus_fin(self):
+    def setup_menus_fin(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Fin du jeu', font_size=20, margin=(0, 20))
-        self.menu.add.label('Le joueur test a gagné', font_size=20, margin=(0, 20))
+        self.menu.add.label('Le joueur {} a gagné'.format(instance_jeu.joueur.username), font_size=20, margin=(0, 20))
+        self.menu.add.button('Recommencer une partie',instance_jeu.partie, instance_jeu.joueur.username)
 
     def setup_menus_quit(self):
         self.menu.clear()
@@ -53,5 +55,6 @@ class Ecran:
         
 
             pygame.display.flip()
+
 
 
