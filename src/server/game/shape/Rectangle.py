@@ -35,9 +35,11 @@ class Rectangle:
         self.__point1 = point1
         self.__point2 = point2
         self.__perimeter = self.__getPerimeter()
+        
     def move(self,y:int):
         self.__point1.y += y
         self.__point2.y += y
+        
     def is_inside_rectangle(self,point:Point):
         return self.__point1.x <= point.x <= self.__point2.x and self.__point1.y <= point.y <= self.__point2.y
     def touchVertical(self,point:Point):

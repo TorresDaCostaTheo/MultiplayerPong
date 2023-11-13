@@ -1,6 +1,4 @@
 boardSize :
   xSize: 600
   ySize: 900
-strikerPos:
-  player1: 10
-  player2 : 590
+win_score: 5
