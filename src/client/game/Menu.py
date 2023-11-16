@@ -30,7 +30,7 @@ class MainMenu:
         self.joueur.connect()
 
     def callBack(self, message):
-        print(message)
+        #print(message)
         try:
             data = json.loads(message)
 
@@ -38,32 +38,33 @@ class MainMenu:
                 joueurs = data['Joueurs']
 
                 for joueur in joueurs:
-                    self.nom_joueur1 = joueur.get("nomJoueur1", "")
-                    self.nom_joueur2 = joueur.get("nomJoueur2", "")                        
+                    self.nom_joueur = joueur.get("nomJoueur", "")                      
+                    score_joueur_str = joueur.get("score", "")
+                    playerYFac_str = joueur.get("playerYFac", "")
+                    pause = joueur.get("pause", "")
 
-                    score_joueur1_str = joueur.get("score1", "")
-                    score_joueur2_str = joueur.get("score2", "")
-
-                    score_joueur1 = int(score_joueur1_str) if score_joueur1_str else 0
-                    score_joueur2 = int(score_joueur2_str) if score_joueur2_str else 0        
-
-                    player1YFac_str = joueur.get("player1YFac", "")
-                    player2YFac_str = joueur.get("player2YFac", "")
-
-                    player1YFac = int(player1YFac_str) if player1YFac_str else 0
-                    player2YFac = int(player2YFac_str) if player2YFac_str else 0
+                    score_joueur = int(score_joueur_str) if score_joueur_str else 0                         
+                    playerYFac = int(playerYFac_str) if playerYFac_str else 0
 
                     if self.game:
-                        self.game.update_player_names(self.nom_joueur1, self.nom_joueur2)
-                        self.game.update_player_fac(player1YFac, player2YFac)
-                        self.game.update_player_score(score_joueur1, score_joueur2)
+                        if(self.PlayerNameInput == self.nom_joueur):
+                            self.game.update_player_name1(self.nom_joueur)
+                            self.game.update_player_score1(score_joueur)
+                            self.game.update_player_fac1(playerYFac)
+                            self.game.update_pause(pause)
+                        else:
+                            print("pas le même joueur")
+                            self.game.update_player_name2(self.nom_joueur)
+                            self.game.update_player_score2(score_joueur)
+                            self.game.update_player_fac2(playerYFac)
+                            self.game.update_pause(pause)
 
         except json.JSONDecodeError as e:
             print("Erreur lors du décodage du message JSON:", e)
 
     def start_the_game(self):
         self.connectJoueur(self.PlayerNameInput, self.ServerInput, self.PortInput)
-        self.joueur.send_message("", 0, 0, self.joueur.username, 0, 0)
+        self.joueur.send_message(self.joueur.username, 0, 0,False)
 
         #if self.nom_joueur1 != "" and self.nom_joueur2 != "":  # Vérifier s'il y a deux joueurs pour commencer le jeu
         self.game = Game(self.joueur)
