@@ -19,7 +19,7 @@ class ClientSocket:
         except Exception as e:
             print("Erreur de connexion au serveur:", str(e))
 
-    def add_values_to_json(self, nomJoueur1,score1,player1YFac,nomJoueur2,score2,player2YFac):
+    def add_values_to_json(self,nomJoueur,score,playerYFac,pause):
         json_file_path = "./src/client/socket/data.json"
 
         # Charger le JSON existant
@@ -31,14 +31,11 @@ class ClientSocket:
             existing_data = {"Joueurs": []}
 
         # Ajouter les nouvelles valeurs
-        existing_data["Joueurs"][0]["nomJoueur1"] = nomJoueur1
-        existing_data["Joueurs"][0]["score1"] = score1
-        existing_data["Joueurs"][0]["player1YFac"] = player1YFac
-
-        existing_data["Joueurs"][1]["nomJoueur2"] = nomJoueur2
-        existing_data["Joueurs"][1]["score2"] = score2
-        existing_data["Joueurs"][1]["player2YFac"] = player2YFac
-
+        existing_data["Joueurs"][0]["nomJoueur"] = nomJoueur
+        existing_data["Joueurs"][0]["score"] = score
+        existing_data["Joueurs"][0]["playerYFac"] = playerYFac
+        existing_data["Joueurs"][0]["pause"] = pause
+    
         # Réécrire le fichier JSON avec les données mises à jour
         with open(json_file_path, 'w') as json_file:
             json.dump(existing_data, json_file, indent=2)
@@ -50,10 +47,10 @@ class ClientSocket:
         return data
 
 
-    def send_message(self, nomJoueur1,score1,player1YFac,nomJoueur2,score2,player2YFac):
+    def send_message(self,nomJoueur,score,playerYFac,pause):
         try:
             # Écrire les données dans le fichier JSON
-            self.add_values_to_json(nomJoueur1,score1,player1YFac,nomJoueur2,score2,player2YFac)
+            self.add_values_to_json(nomJoueur,score,playerYFac,pause)
 
             # Lire les données à partir du fichier JSON
             dataJson = self.read_data_from_json()

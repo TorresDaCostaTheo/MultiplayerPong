@@ -17,6 +17,7 @@ class Game:
         self.player2_name = ""
         self.send_message_interval = 0.5  # Envoyer un message toutes les 0.5 secondes
         self.last_send_time = pygame.time.get_ticks()
+        self.pause=False
 
 
     def partie(self, player1Score, player2Score, BallImage):
@@ -49,6 +50,8 @@ class Game:
                     if event.key == pygame.K_s:
                         self.player1YFac = 1
                     if event.key == pygame.K_ESCAPE:
+                        self.pause=True
+                        self.joueur.send_message(self.joueur.username, self.player2Score, self.player2YFac,self.pause)
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
                         ecran.run()
@@ -83,7 +86,7 @@ class Game:
 
             current_time = pygame.time.get_ticks()
             if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.player1_name, self.player1Score, self.player1YFac, self.joueur.username, self.player2Score, self.player2YFac)
+                self.joueur.send_message(self.joueur.username, self.player2Score, self.player2YFac,self.pause)
                 self.last_send_time = current_time
 
             if self.player1Score == 10 or self.player2Score == 10:
@@ -94,16 +97,25 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def update_player_names(self, player1_name, player2_name):
+    def update_player_name1(self, player1_name):
         if self.player1_name == "":
             self.player1_name = player1_name
+    
+    def update_player_name2(self, player2_name):
         if self.player2_name == "":
             self.player2_name = player2_name
 
-    def update_player_score(self, player1Score, player2Score):
+    def update_player_score1(self, player1Score):
         self.player1Score = player1Score
+
+    def update_player_score2(self, player2Score):
         self.player2Score = player2Score
 
-    def update_player_fac(self, player1YFac, player2YFac):
+    def update_player_fac1(self, player1YFac):
         self.player1YFac = player1YFac
+
+    def update_player_fac2(self, player2YFac):
         self.player2YFac = player2YFac
+
+    def update_pause(self, pause):
+        self.pause=pause
