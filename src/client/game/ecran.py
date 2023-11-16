@@ -9,35 +9,33 @@ class Ecran:
 
         self.menu = pygame_menu.Menu(menu_title, menu_width, menu_height, theme=menu_theme)
     
-    
+
     def set_menu_title(self, new_title):
         self.menu_title = new_title
         self.menu.set_title(new_title)
+
+
+    def setup_menus_Attente(self):
+        self.menu.clear()
+        # Add content to the menu
+        self.menu.add.label('Attendre le second joueur', font_size=20, margin=(0, 20))
+
 
     def setup_menus_pause(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Le jeu est en pause', font_size=20, margin=(0, 20))
-        print(instance_jeu.joueur.username)
             # Add buttons to the menu
-        self.menu.add.button('Reprendre le jeu',instance_jeu.partie, instance_jeu.joueur.username)
+        self.menu.add.button('Reprendre le jeu',instance_jeu.partie,0,0,"./src/asset/Balles/jo.png")
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
     
     def setup_menus_fin(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Fin du jeu', font_size=20, margin=(0, 20))
-        self.menu.add.label('Le joueur {} a gagné'.format(instance_jeu.joueur.username), font_size=20, margin=(0, 20))
-        self.menu.add.button('Recommencer une partie',instance_jeu.partie, instance_jeu.joueur.username)
-
-    def setup_menus_quit(self):
-        self.menu.clear()
-        self.menu.add.label('Quitter le jeu', font_size=20, margin=(0, 20))
-
-        # Add buttons to the menu
-        self.menu.add.button('Oui', self.quit_game)
-        self.menu.add.button('Non', self.setup_menus_pause)
-
+        self.menu.add.label('Le joueur {} a gagné'.format(instance_jeu.player1_name), font_size=20, margin=(0, 20))
+        self.menu.add.button('Recommencer une partie',instance_jeu.partie,0,0,"./src/asset/Balles/jo.png")
+        self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
 
     def run(self):
         while self.running:
