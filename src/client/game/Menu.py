@@ -30,6 +30,7 @@ class MainMenu:
         self.joueur.connect()
 
     def callBack(self, message):
+        print(message)
         try:
             data = json.loads(message)
 
@@ -64,14 +65,14 @@ class MainMenu:
         self.connectJoueur(self.PlayerNameInput, self.ServerInput, self.PortInput)
         self.joueur.send_message("", 0, 0, self.joueur.username, 0, 0)
 
-        if self.nom_joueur1 != "" and self.nom_joueur2 != "":  # Vérifier s'il y a deux joueurs pour commencer le jeu
-            self.game = Game(self.joueur)
-            self.game.partie(0, 0, self.BallImagePath)
-        else:
-            ecran = Ecran(screen.get_width(), screen.get_height(), '', 400, 300, pygame_menu.themes.THEME_DARK)
-            ecran.set_menu_title('Attente')
-            ecran.setup_menus_Attente()
-            ecran.run()
+        #if self.nom_joueur1 != "" and self.nom_joueur2 != "":  # Vérifier s'il y a deux joueurs pour commencer le jeu
+        self.game = Game(self.joueur)
+        self.game.partie(0, 0, self.BallImagePath)
+        #else:
+            #ecran = Ecran(screen.get_width(), screen.get_height(), '', 400, 300, pygame_menu.themes.THEME_DARK)
+            #ecran.set_menu_title('Attente')
+            #ecran.setup_menus_Attente()
+            #ecran.run()
 
     def NameValue(self, name):
         self.PlayerNameInput = name
