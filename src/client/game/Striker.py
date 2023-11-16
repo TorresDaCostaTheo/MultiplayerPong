@@ -4,7 +4,7 @@ from Const import *
 
 class Striker:
   
-    def __init__(self, posx, posy, width, height, speed, color, image_path):
+    def __init__(self, posx, posy, width, height, speed, color, image_path,joueur):
         self.posx = posx
         self.posy = posy
         self.width = width
@@ -14,6 +14,7 @@ class Striker:
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.playerRect = self.image.get_rect(topleft=(self.posx, self.posy))
+        self.joueur=joueur
 
     def display(self):
         screen.blit(self.image, self.playerRect)

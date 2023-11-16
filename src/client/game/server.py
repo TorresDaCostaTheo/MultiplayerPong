@@ -34,7 +34,7 @@ class Server():
             time.sleep(0.1)
 
     def remove_socket(self, socket):
-        self.client_sockets.remove(socket)
+        self.clients_sockets.remove(socket)
 
     def echo(self, data):
         print("echoing:", data)
