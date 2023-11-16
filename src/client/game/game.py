@@ -5,6 +5,7 @@ from Striker import Striker
 from Ball import Ball
 from ecran import Ecran
 
+
 class Game:
     def __init__(self, joueur):
         pygame.init()
@@ -14,6 +15,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.player1_name = ""
         self.player2_name = ""
+        self.send_message_interval = 0.5  # Envoyer un message toutes les 0.5 secondes
+        self.last_send_time = pygame.time.get_ticks()
+
 
     def partie(self, player1Score, player2Score, BallImage):
         running = True
@@ -77,8 +81,10 @@ class Game:
             player1.displayScore(f"{self.player1_name} : ", self.player1Score, 100, 20, WHITE)
             player2.displayScore(f"{self.player2_name} : ", self.player2Score, WIDTH-100, 20, WHITE)
 
-            #Envoyer les données en temps réel
-            self.joueur.send_message(self.player1_name,self.player1Score,self.player1YFac,self.joueur.username,self.player2Score,self.player2YFac)
+            current_time = pygame.time.get_ticks()
+            if current_time - self.last_send_time > self.send_message_interval * 1000:
+                self.joueur.send_message(self.player1_name, self.player1Score, self.player1YFac, self.joueur.username, self.player2Score, self.player2YFac)
+                self.last_send_time = current_time
 
             if self.player1Score == 10 or self.player2Score == 10:
                 ecran.set_menu_title('Fin')
