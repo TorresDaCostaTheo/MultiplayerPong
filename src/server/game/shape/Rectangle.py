@@ -11,11 +11,15 @@ class HorizontalLine(Enum):
     NONE = -1
 
 class Rectangle:
-    def __init__(self,point1:Point=None,point2:Point=None):
+    def __init__(self,point1:Point|None=None,point2:Point|None=None):
         if point1 is not None and point2 is not None:
             self.__point1 = point1
             self.__point2 = point2
-            self.__perimeter = self.__getPerimeter()
+            self.__perimeter = self.getPerimeter()
+        else : 
+            self.__point1 = Point(0,0)
+            self.__point2 = Point(0,0)
+            self.__perimeter = 0
     
     def isOnRectangle(self,point:Point)->bool:
         return (
@@ -34,7 +38,7 @@ class Rectangle:
     def defineRectangle(self,point1:Point,point2:Point):
         self.__point1 = point1
         self.__point2 = point2
-        self.__perimeter = self.__getPerimeter()
+        self.__perimeter = self.getPerimeter()
         
     def move(self,y:int):
         self.__point1.y += y
@@ -57,7 +61,7 @@ class Rectangle:
         else:
             return HorizontalLine.NONE
         
-    def __getPerimeter(self):
+    def getPerimeter(self)->int:
         return (self.width +self.length) * 2
     @property
     def length(self):

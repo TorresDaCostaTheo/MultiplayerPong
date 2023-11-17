@@ -7,12 +7,11 @@ class Player:
     """
     Constructor of the Player class.
     """
-    def __init__(self,id:int,name:str) -> None:
+    def __init__(self,id:int,name:str,address) -> None:
         self.__striker = Striker(id)
         self.__name = name
         self.__score = 0
-        pass
-    def sendData():
+        self.__address = address
         pass
     @property
     def score(self):
@@ -38,5 +37,11 @@ class Player:
     @id.setter
     def id(self,id):
         self.__id = id
+    @property
+    def address(self):
+        return self.__address
+    @address.setter
+    def address(self,address):
+        self.__address = address
     def __str__(self):
-        return "name: "+str(self.name)+" striker: "+str(self.striker.perimeter)
+        return "name: "+str(self.name)+": striker: "+str(self.striker.perimeter)

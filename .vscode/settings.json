@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./src/server/game"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true
+}
