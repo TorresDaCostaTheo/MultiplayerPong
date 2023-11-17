@@ -13,15 +13,17 @@ class State(Enum):
     STARTED = 2
     ENDED = 3
     PAUSE = 4
-class Game:
+class Game(threading.Thread):
     _instance = None
-    def __init__(self,frameSecond:int = 60) -> None:
+    def __init__(self,server,frameSecond:int = 60) -> None: # type: ignore
+        super().__init__(target=self.game)
         self.__frameSecond = frameSecond
-        self.__players:list[Player] = [Player(1,"Joueur1"),Player(2,"Joueur2")]
+        self.__players:list[Player] = []
+        self.__lock = threading.Lock();
+        # self.__players:list[Player] = [Player(1,"Joueur1",None),Player(2,"Joueur2",None)]
         self.__state = State.WAITING
-        self.__game_thread = threading.Thread(target=self.game(),daemon=True)
-        self.__game_thread.start()
-        
+        self.__server = server
+        print(self.__state)       
         
         """_summary_ Method to start the game
         """
@@ -38,18 +40,16 @@ class Game:
     def waiting(self):
         #Function to send waiting message to players
         #Callback for when a player trigger serverThread
-        print("Waiting for players...")
         if self.__players.__len__() == 2:
             self.starting()
     def pause(self):
         
         pass
-    def start(self):
+    def startGame(self):
         for player in self.__players:
             if(player.score == 2):
                 self.__state = State.ENDED
                 return player
-        print(str(self.__players[0].score) + " - "+str(self.__players[1].score))
         return None
 
     def game(self):
@@ -67,7 +67,7 @@ class Game:
                 self.end("win",self.__players[1])
                 break
             if self.__state == State.STARTED:
-                self.start()
+                self.startGame()
                 self.__board.moveBall()
             if self.__state == State.PAUSE:
                 pass
@@ -83,13 +83,22 @@ class Game:
         elif(reason == "win"):
             print(player.name+" win the game")
         return True
-        pass
-    def join(self):
-        self.__players.append(Player())
-        pass
-    def quit(self,player:Player):
-        self.__players.remove(player)
-        pass
+    def joinPlayer(self,player:Player):
+        print("Joining player "+player.__str__())
+        with self.__lock:
+            if self.__players.__len__() >= 2:
+                return False
+            else:
+                self.__players.append(player)
+                return True
+    def quit(self,id:int):
+        with self.__lock:
+            player_with_id = next((player for player in self.__players if player.id == id),None)
+            if player_with_id is not None:
+                self.__players.remove(player_with_id)
+                return True
+            else:
+                return False
     
     @property
     def players(self):  
@@ -98,10 +107,16 @@ class Game:
     def frameSecond(self):
         return self.__frameSecond
     @classmethod
-    def getInstance(cls):
+    def getInstance(cls,server): # type: ignore
         if cls._instance is None:
-            cls._instance = cls()
+            cls._instance = cls(server=server) # type: ignore
         return cls._instance
+    @property
+    def thread(self):
+        return super()
+    @property
+    def state(self):
+        return self.__state
 
 class GameBoard():
     """Board of the game
