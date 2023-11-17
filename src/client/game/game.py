@@ -19,6 +19,8 @@ class Game:
         self.last_send_time = pygame.time.get_ticks()
         self.pause=False
 
+    def update_ball_position(self, position):
+        self.ball.position = position
 
     def partie(self, player1Score, player2Score, BallImage):
         running = True
@@ -51,7 +53,7 @@ class Game:
                         self.player1YFac = 1
                     if event.key == pygame.K_ESCAPE:
                         self.pause=True
-                        self.joueur.send_message(self.joueur.username, self.player1YFac,self.pause)
+                        self.joueur.send_message(self.joueur.username, self.player1YFac,self.pause,0,0)
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
                         ecran.run()
@@ -91,7 +93,7 @@ class Game:
 
             current_time = pygame.time.get_ticks()
             if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.joueur.username,self.player1YFac,self.pause)
+                self.joueur.send_message(self.joueur.username,self.player1YFac,self.pause,0,0)
                 self.last_send_time = current_time
 
             if self.player1Score == 10 or self.player2Score == 10:
