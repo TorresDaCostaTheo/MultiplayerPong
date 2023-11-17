@@ -1,8 +1,7 @@
 {
-  "Joueurs": [
+  "Players": [
     {
-      "nomJoueur": "test",
-      "score": 9,
+      "namePlayer": "1",
       "playerYFac": 0,
       "pause": false
     }
