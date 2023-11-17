@@ -13,9 +13,9 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Pong")
         self.clock = pygame.time.Clock()
-        self.player1_name = ""
+        self.player1_name = joueur.username
         self.player2_name = ""
-        self.send_message_interval = 0.5  # Envoyer un message toutes les 0.5 secondes
+        self.send_message_interval = 0.1  # Envoyer un message toutes les 0.5 secondes
         self.last_send_time = pygame.time.get_ticks()
         self.pause=False
 
@@ -25,7 +25,7 @@ class Game:
         player1 = Striker(20, 0, 40, 100, 10, GREEN, StrikerGaucheImagePath, self.joueur)
         player2 = Striker(WIDTH-50, 0, 40, 100, 10, RED, StrikerDroitImagePath, self.joueur)
         ball = Ball(WIDTH//2, HEIGHT//2, 50, 60, WHITE, BallImage)
-        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK)
+        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
 
         listOfplayers = [player1, player2]
 
@@ -51,7 +51,12 @@ class Game:
                         self.player1YFac = 1
                     if event.key == pygame.K_ESCAPE:
                         self.pause=True
-                        self.joueur.send_message(self.joueur.username, self.player2Score, self.player2YFac,self.pause)
+                        self.joueur.send_message(self.joueur.username, self.player1Score, self.player1YFac,self.pause)
+                        ecran.set_menu_title('Pause')
+                        ecran.setup_menus_pause(self)
+                        ecran.run()
+
+                if self.pause == True:
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
                         ecran.run()
@@ -86,7 +91,7 @@ class Game:
 
             current_time = pygame.time.get_ticks()
             if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.joueur.username, self.player2Score, self.player2YFac,self.pause)
+                self.joueur.send_message(self.joueur.username, self.player1Score, self.player1YFac,self.pause)
                 self.last_send_time = current_time
 
             if self.player1Score == 10 or self.player2Score == 10:
@@ -97,22 +102,14 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def update_player_name1(self, player1_name):
-        if self.player1_name == "":
-            self.player1_name = player1_name
     
     def update_player_name2(self, player2_name):
         if self.player2_name == "":
             self.player2_name = player2_name
-
-    def update_player_score1(self, player1Score):
-        self.player1Score = player1Score
+            print(self.player2_name)
 
     def update_player_score2(self, player2Score):
         self.player2Score = player2Score
-
-    def update_player_fac1(self, player1YFac):
-        self.player1YFac = player1YFac
 
     def update_player_fac2(self, player2YFac):
         self.player2YFac = player2YFac

@@ -2,33 +2,51 @@ import pygame_menu
 import pygame
 
 class Ecran:
-    def __init__(self, width, height, menu_title, menu_width, menu_height, menu_theme):
+    def __init__(self, width, height, menu_title, menu_width, menu_height, menu_theme,joueur):
         self.surface = pygame.display.set_mode((width, height))
         self.running = True
         self.menu_title=menu_title
-
+        self.joueur=joueur
         self.menu = pygame_menu.Menu(menu_title, menu_width, menu_height, theme=menu_theme)
-    
+        self.send_message_interval = 0.1  # Envoyer un message toutes les 0.5 secondes
+        self.last_send_time = pygame.time.get_ticks()
 
     def set_menu_title(self, new_title):
         self.menu_title = new_title
         self.menu.set_title(new_title)
 
 
-    def setup_menus_Attente(self):
+    def setup_menus_Attente(self,instance_menu,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Attendre le second joueur', font_size=20, margin=(0, 20))
+        while True:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.last_send_time > self.send_message_interval * 1000:
+                self.joueur.send_message(self.joueur.username, 0,0,False)
+                self.last_send_time = current_time
+
+            if instance_menu.nom_joueur2 != "":
+                instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
+                break  # Sort de la boucle une fois que les conditions sont remplies
 
 
     def setup_menus_pause(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Le jeu est en pause', font_size=20, margin=(0, 20))
-            # Add buttons to the menu
-        self.menu.add.button('Reprendre le jeu',instance_jeu.partie,0,0,"./src/asset/Balles/jo.png")
+        
+        # Add buttons to the menu
+        self.menu.add.button('Reprendre le jeu', lambda: self.reprendre_partie(instance_jeu))
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
-    
+
+
+    def reprendre_partie(self,instance_jeu):
+        instance_jeu.pause=False
+        self.joueur.send_message(self.joueur.username, instance_jeu.player1Score, instance_jeu.player1Score,instance_jeu.pause)
+        instance_jeu.partie(instance_jeu.player1Score,instance_jeu.player2Score,"./src/asset/Balles/jo.png")
+
+
     def setup_menus_fin(self,instance_jeu):
         self.menu.clear()
         # Add content to the menu

@@ -1,10 +1,10 @@
 {
-  "Joueurs": [
+  "Players": [
     {
-      "nomJoueur": "test",
-      "score": 9,
+      "namePlayer": "test",
+      "score": 4,
       "playerYFac": 0,
-      "pause": false
+      "pause": true
     }
   ]
 }

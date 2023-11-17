@@ -28,10 +28,10 @@ class ClientSocket:
                 existing_data = json.load(json_file)
         except FileNotFoundError:
             # Si le fichier n'existe pas, initialiser avec une structure de base
-            existing_data = {"Joueurs": []}
+            existing_data = {"Players": []}
 
         # Ajouter les nouvelles valeurs
-        existing_data["Joueurs"][0]["nomJoueur"] = nomJoueur
+        existing_data["Joueurs"][0]["namePlayer"] = nomJoueur
         existing_data["Joueurs"][0]["score"] = score
         existing_data["Joueurs"][0]["playerYFac"] = playerYFac
         existing_data["Joueurs"][0]["pause"] = pause
