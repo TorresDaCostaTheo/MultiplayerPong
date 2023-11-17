@@ -3,6 +3,7 @@ from calendar import c
 from enum import Enum
 import threading
 from time import sleep
+from unittest.mock import call
 
 from game.Player import Player
 from game.Ball import Ball
@@ -32,7 +33,6 @@ class Game(threading.Thread):
     def starting(self):
         self.__ball = Ball(Point(100,100),3)
         self.__board = GameBoard(self.__players,self.__ball,self.__frameSecond)
-        #resize location of strikers
         dimension =  round(self.__board.board.point1.x * 0.8)
         for player in self.__players:
             player.striker.defineRectangle(Point(0+dimension,10),Point(0+dimension+10,60))
@@ -43,6 +43,7 @@ class Game(threading.Thread):
         #Function to send waiting message to players
         #Callback for when a player trigger serverThread
         if self.__players.__len__() == 2:
+            print(self.__state)
             self.starting()
     def pause(self):
         
@@ -53,9 +54,8 @@ class Game(threading.Thread):
                 self.__state = State.ENDED
                 return player
         return None
-
     def game(self):
-        print("Game loop")
+        print("Game is running")
         playerWinner:Player|None = None
         while True:
             if self.__players.__len__() > 2:
@@ -65,13 +65,14 @@ class Game(threading.Thread):
                 self.__state = State.ENDED
             if self.__state == State.WAITING:
                 self.waiting()
-            if self.__state == State.ENDED:
-                self.end("win",self.__players[1])
+            if self.__state == State.ENDED and playerWinner is not None:
+                self.end("win",playerWinner)
                 break
             if self.__state == State.STARTED:
-                self.startGame()
+                playerWinner = self.startGame()
                 self.__board.moveBall()
-                self.__callback()
+                with self.__lock:
+                    self.__callback(self.__ball.__str__())
             if self.__state == State.PAUSE:
                 pass
             sleep(1/self.__frameSecond)
@@ -82,16 +83,22 @@ class Game(threading.Thread):
     """
     def end(self,reason:str,player:Player)->bool:
         if(reason == "kick"):
+            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","kick":{True}}}}}')
             pass
         elif(reason == "win"):
+            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","win":{True}}}}}')
             print(player.name+" win the game")
         return True
     def joinPlayer(self,player:Player):
-        print("Joining player "+player.__str__())
         with self.__lock:
-            if self.__players.__len__() >= 2:
+            if self.__players.__len__() > 2:
+                self.__callback(f'{{"receiver":{player.address},"player":{{"namePlayer":"{player.name}","join":{False}}}}}')
                 return False
             else:
+                print(player.name + " join the game "+str(self.__players.__len__() + 1))
+                if(self.__players.__len__() > 1):
+                    pass
+                    self.__callback(f'{{"receiver":{self.__players[0].address},"player":{{"namePlayer":"{self.__players[0].name}","join":{True}}}}}')
                 self.__players.append(player)
                 return True
     def quit(self,id:int):
@@ -127,7 +134,7 @@ class GameBoard():
     def __init__(self,players:list[Player],ball:Ball,frameSecond:int) -> None:
         self.__players = players
         self.__ball = ball
-        self.__board = Rectangle(Point(0,0),Point(600,900))
+        self.__board = Rectangle(Point(0,0),Point(900,600))
         self.__frameSecond = frameSecond
         self.__switchDirection = False
         self.__switchLatitude = True
@@ -139,7 +146,6 @@ class GameBoard():
         slope = 1
         self.__ball.coordY = slope*self.__ball.coordX +0
         if(self.__board.isOnRectangle(Point(self.__ball.coordX,self.__ball.coordY))):
-            # print("Ball is on board")
             pass
         else:
             self.__isTouchBoard()
@@ -153,8 +159,6 @@ class GameBoard():
         else:
             slope = -1
         
-    
-    
     def __isTouchBoard(self):
             # ball touch top border y = max
             if(self.__board.touchHorizontal(Point(self.__ball.coordX,self.__ball.coordY)) == HorizontalLine.TOP):

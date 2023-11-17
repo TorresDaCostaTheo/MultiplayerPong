@@ -76,8 +76,8 @@ class MainMenu:
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
-
-        self.joueur.send_data_game(self.joueur.username, 0,False)
+        
+        self.joueur.sendMessage(self.joueur.username, 0)
         self.game = Game(self.joueur)
         self.ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
 
