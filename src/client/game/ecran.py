@@ -23,7 +23,7 @@ class Ecran:
         while True:
             current_time = pygame.time.get_ticks()
             if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.joueur.username, 0,0,False)
+                self.joueur.send_message(self.joueur.username, 0,False)
                 self.last_send_time = current_time
 
             if instance_menu.nom_joueur2 != "":
@@ -43,7 +43,7 @@ class Ecran:
 
     def reprendre_partie(self,instance_jeu):
         instance_jeu.pause=False
-        self.joueur.send_message(self.joueur.username, instance_jeu.player1Score, instance_jeu.player1Score,instance_jeu.pause)
+        self.joueur.send_message(self.joueur.username, instance_jeu.player1YFac,instance_jeu.pause)
         instance_jeu.partie(instance_jeu.player1Score,instance_jeu.player2Score,"./src/asset/Balles/jo.png")
 
 

@@ -1,10 +1,9 @@
 {
   "Players": [
     {
-      "namePlayer": "test",
-      "score": 4,
+      "namePlayer": "1",
       "playerYFac": 0,
-      "pause": true
+      "pause": false
     }
   ]
 }

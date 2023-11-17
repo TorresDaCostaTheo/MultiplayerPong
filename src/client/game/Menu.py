@@ -29,31 +29,28 @@ class MainMenu:
         self.joueur.connect()
 
     def callBack(self, message):
-        #print(message)
+        print(message)
         dataJoueur2=False
         try:
             data = json.loads(message)
 
-            if 'Joueurs' in data:
-                joueurs = data['Joueurs']
+            if 'Players' in data:
+                joueurs = data['Players']
 
                 for joueur in joueurs:
-                    self.nom_joueur2 = joueur.get("nomJoueur", "")
+                    self.nom_joueur2 = joueur.get("namePlayers", "")
 
                     if self.playerInput!=self.nom_joueur2:
                         dataJoueur2=True
 
                     if self.game:
                         if(dataJoueur2== True):
-                            score_joueur_str = joueur.get("score", "")
                             playerYFac_str = joueur.get("playerYFac", "")
                             pause = joueur.get("pause", "")
-                            
-                            score_joueur = int(score_joueur_str) if score_joueur_str else 0                         
+                                                 
                             playerYFac = int(playerYFac_str) if playerYFac_str else 0
 
                             self.game.update_player_name2(self.nom_joueur2)
-                            self.game.update_player_score2(score_joueur)
                             self.game.update_player_fac2(playerYFac)
                             self.game.update_pause(pause)
 
@@ -62,18 +59,11 @@ class MainMenu:
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
-        self.joueur.send_message(self.joueur.username, 0, 0,False)
+        self.joueur.send_message(self.joueur.username, 0,False)
         self.game = Game(self.joueur)
         ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
-
         
-        if self.nom_joueur2!="":
-            self.game.partie(0, 0, self.BallImagePath)
-        else:
-            ecran.set_menu_title('Attente')
-            ecran.setup_menus_Attente(self,self.game)
-            ecran.run()
-
+        self.game.partie(0, 0, self.BallImagePath)
 
     def NameValue(self, name):
         self.playerInput = name
