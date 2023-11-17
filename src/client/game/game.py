@@ -19,6 +19,8 @@ class Game:
         self.last_send_time = pygame.time.get_ticks()
         self.pause=False
 
+    def update_ball_position(self, position):
+        self.ball.position = position
 
     def partie(self, player1Score, player2Score, BallImage):
         running = True

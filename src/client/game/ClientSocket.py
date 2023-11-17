@@ -74,8 +74,20 @@ class ClientSocket:
                 message = data.decode()
                 self.callback(message)
             except Exception as e:
-                print("Erreur lors de la réception du message:", str(e))
+                # print("Erreur lors de la réception du message:", str(e))
                 break
+
+    def sendMessage(self,nomJoueur,playerYFac):
+        message = {
+                "player":
+                    {
+                        "namePlayer": nomJoueur,
+                        "playerYFac": playerYFac,
+                        "join": True,
+                    }
+            }
+        json_data = json.dumps(message)
+        self.socket.send(json_data.encode())
 
     def disconnect(self):
         self.socket.close()

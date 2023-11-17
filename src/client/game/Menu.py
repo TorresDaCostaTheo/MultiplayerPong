@@ -14,6 +14,7 @@ class MainMenu:
         self.PortInput = 0
         self.joueur = None
         self.game=None
+        self.ball_position = None
 
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
@@ -36,33 +37,35 @@ class MainMenu:
 
             if 'Players' in data:
                 joueurs = data['Players']
+                if 'ball_position' in data:
+                    self.ball_position = data['ball_position']
+                    for joueur in joueurs:
+                        self.nom_joueur2 = joueur.get("namePlayers", "")
 
-                for joueur in joueurs:
-                    self.nom_joueur2 = joueur.get("namePlayers", "")
+                        if self.playerInput!=self.nom_joueur2:
+                            dataJoueur2=True
 
-                    if self.playerInput!=self.nom_joueur2:
-                        dataJoueur2=True
-
-                    if self.game:
-                        if(dataJoueur2== True):
-                            playerYFac_str = joueur.get("playerYFac", "")
-                            pause = joueur.get("pause", "")
-                                                 
-                            playerYFac = int(playerYFac_str) if playerYFac_str else 0
-
-                            self.game.update_player_name2(self.nom_joueur2)
-                            self.game.update_player_fac2(playerYFac)
-                            self.game.update_pause(pause)
+                        if self.game:
+                            if(dataJoueur2== True):
+                                playerYFac_str = joueur.get("playerYFac", "")
+                                pause = joueur.get("pause", "")
+                                                    
+                                playerYFac = int(playerYFac_str) if playerYFac_str else 0
+                                
+                                self.game.update_ball_position(self.ball_position)
+                                self.game.update_player_name2(self.nom_joueur2)
+                                self.game.update_player_fac2(playerYFac)
+                                self.game.update_pause(pause)
 
         except json.JSONDecodeError as e:
             print("Erreur lors du décodage du message JSON:", e)
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
-        self.joueur.send_message(self.joueur.username, 0,False)
+        # self.joueur.send_message(self.joueur.username, 0,False)
         self.game = Game(self.joueur)
         ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
-        
+        self.joueur.sendMessage(self.joueur.username, 0)
         self.game.partie(0, 0, self.BallImagePath)
 
     def NameValue(self, name):
