@@ -15,6 +15,7 @@ class MainMenu:
         self.joueur = None
         self.game=None
         self.ball_position = None
+        self.ecranAttente=None
 
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
@@ -25,7 +26,7 @@ class MainMenu:
         self.menu.add.button('Jouer', self.start_the_game)
         self.menu.add.button('Quitter', pygame_menu.events.EXIT)
 
-        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
+        
 
     def connectJoueur(self, username, server, port):
         self.joueur = ClientSocket(username, server, int(port), self.callBack)
@@ -37,18 +38,20 @@ class MainMenu:
             data = json.loads(message)
 
             if 'player' in data:
-                joueurs = data['Player']
-                for joueur in joueurs:
-                    temp=joueur.get("namePlayer", "")
-                    if self.playerInput!= temp:
-                        self.nom_joueur2 = joueur.get("namePlayer", "")
-                        
-                    if self.game:
-                        if self.playerInput!=self.nom_joueur2:
-                            self.nom_joueur2 = joueur.get("namePlayer", "")                            
+                joueur = data['player']
+                
+                temp = joueur.get("namePlayer", "")
+                if self.playerInput != temp:
+                    self.nom_joueur2 = temp
+                
+                    if self.playerInput != self.nom_joueur2:
+
+                        if self.ecranAttente:
+                            self.ecranAttente.update_nom_joueur2(self.nom_joueur2,self.game)
+                        if self.game:
                             playerYFac_str = joueur.get("playerYFac", "")
                             pause = joueur.get("pause", "")
-                                                 
+                        
                             playerYFac = int(playerYFac_str) if playerYFac_str else 0
 
                             self.game.update_player_name2(self.nom_joueur2)
@@ -57,19 +60,23 @@ class MainMenu:
 
         except json.JSONDecodeError as e:
             print("Erreur lors du décodage du message JSON:", e)
+        except Exception as ex:
+            print("Une erreur s'est produite lors de la gestion du message:", ex)
+
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
 
         self.joueur.send_message(self.joueur.username, 0,False,0,0)
         self.game = Game(self.joueur)
-    
+        self.ecranAttente = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
 
-        # self.joueur.send_message(self.joueur.username, 0,False)
-        self.game = Game(self.joueur)
-        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
-        self.joueur.sendMessage(self.joueur.username, 0)
-        self.game.partie(0, 0, self.BallImagePath)
+        if self.playerInput!="" and self.nom_joueur2!="":
+            self.game.partie(0, 0, self.BallImagePath)
+        else:
+            self.ecranAttente.set_menu_title("Attente")
+            self.ecranAttente.setup_menus_Attente(self.game)
+            self.ecranAttente.run()
 
     def NameValue(self, name):
         self.playerInput = name
