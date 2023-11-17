@@ -15,7 +15,6 @@ class MainMenu:
         self.joueur = None
         self.game=None
         self.ball_position = None
-        self.join=False
 
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
@@ -61,9 +60,15 @@ class MainMenu:
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
+
         self.joueur.send_message(self.joueur.username, 0,False,0,0)
         self.game = Game(self.joueur)
     
+
+        # self.joueur.send_message(self.joueur.username, 0,False)
+        self.game = Game(self.joueur)
+        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
+        self.joueur.sendMessage(self.joueur.username, 0)
         self.game.partie(0, 0, self.BallImagePath)
 
     def NameValue(self, name):
