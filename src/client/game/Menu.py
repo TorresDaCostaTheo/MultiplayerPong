@@ -14,6 +14,8 @@ class MainMenu:
         self.PortInput = 0
         self.joueur = None
         self.game=None
+        self.ball_position = None
+        self.join=False
 
         self.menu = pygame_menu.Menu('Pong', screen.get_width(), screen.get_height(), theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
@@ -24,27 +26,27 @@ class MainMenu:
         self.menu.add.button('Jouer', self.start_the_game)
         self.menu.add.button('Quitter', pygame_menu.events.EXIT)
 
+        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
+
     def connectJoueur(self, username, server, port):
         self.joueur = ClientSocket(username, server, int(port), self.callBack)
         self.joueur.connect()
 
     def callBack(self, message):
         print(message)
-        dataJoueur2=False
         try:
             data = json.loads(message)
 
-            if 'Players' in data:
-                joueurs = data['Players']
-
+            if 'player' in data:
+                joueurs = data['Player']
                 for joueur in joueurs:
-                    self.nom_joueur2 = joueur.get("namePlayers", "")
-
-                    if self.playerInput!=self.nom_joueur2:
-                        dataJoueur2=True
-
+                    temp=joueur.get("namePlayer", "")
+                    if self.playerInput!= temp:
+                        self.nom_joueur2 = joueur.get("namePlayer", "")
+                        
                     if self.game:
-                        if(dataJoueur2== True):
+                        if self.playerInput!=self.nom_joueur2:
+                            self.nom_joueur2 = joueur.get("namePlayer", "")                            
                             playerYFac_str = joueur.get("playerYFac", "")
                             pause = joueur.get("pause", "")
                                                  
@@ -59,10 +61,9 @@ class MainMenu:
 
     def start_the_game(self):
         self.connectJoueur(self.playerInput, self.ServerInput, self.PortInput)
-        self.joueur.send_message(self.joueur.username, 0,False)
+        self.joueur.send_message(self.joueur.username, 0,False,0,0)
         self.game = Game(self.joueur)
-        ecran = Ecran(WIDTH, HEIGHT, '', 400, 300, pygame_menu.themes.THEME_DARK,self.joueur)
-        
+    
         self.game.partie(0, 0, self.BallImagePath)
 
     def NameValue(self, name):

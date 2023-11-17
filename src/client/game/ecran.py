@@ -7,9 +7,8 @@ class Ecran:
         self.running = True
         self.menu_title=menu_title
         self.joueur=joueur
+        self.nom_joueur2=""
         self.menu = pygame_menu.Menu(menu_title, menu_width, menu_height, theme=menu_theme)
-        self.send_message_interval = 0.1  # Envoyer un message toutes les 0.5 secondes
-        self.last_send_time = pygame.time.get_ticks()
 
     def set_menu_title(self, new_title):
         self.menu_title = new_title
@@ -20,15 +19,9 @@ class Ecran:
         self.menu.clear()
         # Add content to the menu
         self.menu.add.label('Attendre le second joueur', font_size=20, margin=(0, 20))
-        while True:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.joueur.username, 0,False)
-                self.last_send_time = current_time
-
-            if instance_menu.nom_joueur2 != "":
-                instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
-                break  # Sort de la boucle une fois que les conditions sont remplies
+        
+        if self.nom_joueur2 != "":
+            instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
 
 
     def setup_menus_pause(self,instance_jeu):
@@ -43,7 +36,7 @@ class Ecran:
 
     def reprendre_partie(self,instance_jeu):
         instance_jeu.pause=False
-        self.joueur.send_message(self.joueur.username, instance_jeu.player1YFac,instance_jeu.pause)
+        self.joueur.send_message(self.joueur.username, instance_jeu.player1YFac,instance_jeu.pause,0,0)
         instance_jeu.partie(instance_jeu.player1Score,instance_jeu.player2Score,"./src/asset/Balles/jo.png")
 
 
@@ -73,4 +66,5 @@ class Ecran:
             pygame.display.flip()
 
 
-
+    def update_nom_joueur2(self, nom_joueur2):
+        self.nom_joueur2=nom_joueur2
