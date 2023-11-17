@@ -1,0 +1,14 @@
+{
+  "Players": [
+    {
+<<<<<<< HEAD
+      "namePlayer": "1",
+=======
+      "nomJoueur": "",
+      "score": 4,
+>>>>>>> 35456a6 (en cours)
+      "playerYFac": 0,
+      "pause": false
+    }
+  ]
+}

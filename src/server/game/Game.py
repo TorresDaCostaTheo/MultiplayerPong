@@ -1,4 +1,5 @@
 
+from calendar import c
 from enum import Enum
 import threading
 from time import sleep
@@ -15,14 +16,15 @@ class State(Enum):
     PAUSE = 4
 class Game(threading.Thread):
     _instance = None
-    def __init__(self,server,frameSecond:int = 60) -> None: # type: ignore
+    def __init__(self,server,callback,frameSecond:int = 60) -> None: # type: ignore
         super().__init__(target=self.game)
         self.__frameSecond = frameSecond
         self.__players:list[Player] = []
-        self.__lock = threading.Lock();
+        self.__lock = threading.Lock()
         # self.__players:list[Player] = [Player(1,"Joueur1",None),Player(2,"Joueur2",None)]
         self.__state = State.WAITING
         self.__server = server
+        self.__callback = callback
         print(self.__state)       
         
         """_summary_ Method to start the game
@@ -69,6 +71,7 @@ class Game(threading.Thread):
             if self.__state == State.STARTED:
                 self.startGame()
                 self.__board.moveBall()
+                self.__callback()
             if self.__state == State.PAUSE:
                 pass
             sleep(1/self.__frameSecond)
@@ -107,9 +110,9 @@ class Game(threading.Thread):
     def frameSecond(self):
         return self.__frameSecond
     @classmethod
-    def getInstance(cls,server): # type: ignore
+    def getInstance(cls,server,callback): # type: ignore
         if cls._instance is None:
-            cls._instance = cls(server=server) # type: ignore
+            cls._instance = cls(server=server,callback=callback) # type: ignore
         return cls._instance
     @property
     def thread(self):

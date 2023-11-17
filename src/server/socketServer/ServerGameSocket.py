@@ -19,7 +19,7 @@ class ServerGameSocket(threading.Thread):
         self.__socket.bind(('',port))
         self.__socket.listen(1)
         self.__clients_socket:list[socket.socket] = []
-        self.__game = Game.getInstance(server=self) # type: ignore
+        self.__game = Game.getInstance(server=self,callback=self.handleCallback) # type: ignore
         self.__game.thread.start()
         
         print("ServerGameSocket created")
@@ -54,6 +54,9 @@ class ServerGameSocket(threading.Thread):
     def remove_socket(self,socket:socket.socket):
         self.__clients_socket.remove(socket)
         pass
+    def handleCallback(self):
+        print("Callback")
+        pass
     @property
     def game(self):
         return self.__game
@@ -82,17 +85,23 @@ class ClientGameThread(threading.Thread):
             sleep(0.1)
         print("Ending client thread for ",self.__address)
     def send(self,data:Any):
-        self.__socket.sendall(data.encode())       
+        self.__socket.sendall(data.encode())
     def handleMessage(self,data):
         print(data)
         if data is None:
             return
         try:
             decodeData =self.decodeJSON(data)
-            if decodeData['player'] is not None:
+            self.isJoinTag(decodeData)
+            pass
+        except ExecError as exc:
+            print(f"Error while decoding JSON \n {exc}")
+        pass
+    def isJoinTag(self,decodeData:Any):
+         if decodeData['player'] is not None:
                 print(decodeData['player'])
                 if(decodeData['player']['join'] == True):
-                    name:str = decodeData['player']['name']
+                    name:str = decodeData['player']['namePlayer']
                     id = 0
                     if(id == 1):
                         id = 1
@@ -106,10 +115,18 @@ class ClientGameThread(threading.Thread):
                 elif(decodeData['player']['quit'] == True):
                     id:int = decodeData['player']['id']
                     self.__server.game.quit(id)
-                print(decodeData['player'])
-            pass
-        except ExecError as exc:
-            print(f"Error while decoding JSON \n {exc}")
+    def isQuitTag(self,decodeData):
+        if decodeData['player'] is not None:
+            if(decodeData['player']['quit'] == True):
+                id:int = decodeData['player']['id']
+                self.__server.game.quit(id)
+        pass
+    def isMoveTag(self,decodeData):
+        if decodeData['player'] is not None:
+            if(decodeData['player']['move']):
+                id:int = decodeData['player']['id']
+                y:int = decodeData['player']['y']
+                
         pass
     def quit(self):
         self.__listening = False
@@ -119,15 +136,3 @@ class ClientGameThread(threading.Thread):
     def decodeJSON(self,data):
         obj =json.loads(data)
         return obj
-class GameObject:
-    """Défini tout ce qui est manipuler par le jeu, c'est à dire la balle
-    """
-    def __init__(self,data) -> None:
-        game_data = data["game"]
-        if game_data is None:
-            raise Exception("Game data is not valid")
-        else:
-            ball = game_data['ball']
-            x = ball['x']
-            y=  ball['y']
-        pass
