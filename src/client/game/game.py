@@ -19,9 +19,6 @@ class Game:
         self.last_send_time = pygame.time.get_ticks()
         self.pause=False
 
-    def update_ball_position(self, position):
-        self.ball.position = position
-
     def partie(self, player1Score, player2Score, BallImage):
         running = True
         player1 = Striker(20, 0, 40, 100, 10, GREEN, StrikerGaucheImagePath, self.joueur)
@@ -53,15 +50,16 @@ class Game:
                         self.player1YFac = 1
                     if event.key == pygame.K_ESCAPE:
                         self.pause=True
-                        self.joueur.send_message(self.joueur.username, self.player1YFac,self.pause,0,0)
+                        self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
-                        ecran.run()
-
-                if self.pause == True:
+                        ecran.run("pause")
+                    
+                
+                if self.pause==True:
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
-                        ecran.run()
+                        ecran.run("pause")
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
@@ -93,22 +91,20 @@ class Game:
 
             current_time = pygame.time.get_ticks()
             if current_time - self.last_send_time > self.send_message_interval * 1000:
-                self.joueur.send_message(self.joueur.username,self.player1YFac,self.pause,0,0)
+                self.joueur.send_data_game(self.joueur.username,self.player1YFac,self.pause)
                 self.last_send_time = current_time
 
             if self.player1Score == 10 or self.player2Score == 10:
                 ecran.set_menu_title('Fin')
                 ecran.setup_menus_fin(self)
-                ecran.run()
+                ecran.run("fin")
                 
             pygame.display.update()
             self.clock.tick(FPS)
 
-    
     def update_player_name2(self, player2_name):
         if self.player2_name == "":
             self.player2_name = player2_name
-            print(self.player2_name)
 
     def update_player_score2(self, player2Score):
         self.player2Score = player2Score

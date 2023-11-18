@@ -1,6 +1,7 @@
 import pygame
 import json
 from Const import *
+import time
 
 class Ball:
 
@@ -56,4 +57,11 @@ class Ball:
       	
     def sendBallToServer(self,sock):
         ballJson=json.dumps(self.__dict__)
+        print(ballJson)
         sock.send(ballJson.encode())
+    
+
+    def update_ball(self,coordX,coordY,speed):
+        self.posx=coordX
+        self.posy=coordY
+        self.speed=speed

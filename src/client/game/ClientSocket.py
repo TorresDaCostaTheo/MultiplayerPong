@@ -19,7 +19,7 @@ class ClientSocket:
         except Exception as e:
             print("Erreur de connexion au serveur:", str(e))
 
-    def send_message(self, nomJoueur, playerYFac, pause,x,y):
+    def send_data_game(self, nomJoueur, playerYFac, pause):
             try:
                 # Créer un dictionnaire avec les données du joueur
                 player_data = {
@@ -29,15 +29,34 @@ class ClientSocket:
                             "playerYFac": playerYFac,
                             "pause": pause
                         }
-                    ,"ball":
-                        {
-                         "x":x,
-                         "y":y
-                        }
                 }
 
                 # Convertir le dictionnaire en une chaîne JSON
                 json_data = json.dumps(player_data)
+
+                # Ajouter un caractère de nouvelle ligne après chaque message JSON
+                message = f"{json_data}\n"
+
+                # Envoi du message JSON
+                self.socket.send(message.encode())
+            except Exception as e:
+                print("Erreur lors de l'envoi du message:", str(e))
+        
+    
+    def send_data_ball(self,x,y,speed):
+            try:
+                # Créer un dictionnaire avec les données du joueur
+                ball_data = {
+                    "ball":
+                        {
+                         "coordX":x,
+                         "coordY":y,
+                         "speed":speed
+                        }
+                }
+
+                # Convertir le dictionnaire en une chaîne JSON
+                json_data = json.dumps(ball_data)
 
                 # Ajouter un caractère de nouvelle ligne après chaque message JSON
                 message = f"{json_data}\n"
@@ -58,18 +77,6 @@ class ClientSocket:
             except Exception as e:
                 # print("Erreur lors de la réception du message:", str(e))
                 break
-
-    def sendMessage(self,nomJoueur,playerYFac):
-        message = {
-                "player":
-                    {
-                        "namePlayer": nomJoueur,
-                        "playerYFac": playerYFac,
-                        "join": True,
-                    }
-            }
-        json_data = json.dumps(message)
-        self.socket.send(json_data.encode())
 
     def disconnect(self):
         self.socket.close()
