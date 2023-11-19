@@ -96,10 +96,14 @@ class Game:
                 self.last_send_time = current_time
 
             if self.player1Score == 10:
+                self.pause=True
+                self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                 ecran.set_menu_title('Fin')
                 ecran.setup_menus_fin(self,self.player1_name)
                 ecran.run("fin")
             elif self.player2Score ==10:
+                self.pause=True
+                self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                 ecran.set_menu_title('Fin')
                 ecran.setup_menus_fin(self,self.player2_name)
                 ecran.run("fin")

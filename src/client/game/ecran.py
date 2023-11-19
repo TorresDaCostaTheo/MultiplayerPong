@@ -35,12 +35,11 @@ class Ecran:
         self.menu.add.label('Le jeu est en pause', font_size=20, margin=(0, 20))
 
         # Ajoutez des boutons au menu
-        self.menu.add.button('Reprendre le jeu', lambda: self.display_pause(instance_jeu))
+        self.menu.add.button('Reprendre le jeu',lambda:self.display_pause(instance_jeu))
 
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
 
     def display_pause(self,instance_jeu):
-        print("je suis dans display pause")
         self.joueur.send_data_game(self.joueur.username, instance_jeu.player1YFac, False)
         pause=self.return_pause()
     
@@ -52,8 +51,16 @@ class Ecran:
         # Ajoutez du contenu au menu
         self.menu.add.label('Fin du jeu', font_size=20, margin=(0, 20))
         self.menu.add.label('Le joueur {} a gagné'.format(winner), font_size=20, margin=(0, 20))
-        self.menu.add.button('Recommencer une partie', instance_jeu.partie, 0, 0, "./src/asset/Balles/jo.png")
+        self.menu.add.button('Recommencer une partie',lambda:self.display_fin(instance_jeu))
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
+    
+
+    def display_fin(self,instance_jeu):
+        self.joueur.send_data_game(self.joueur.username, instance_jeu.player1YFac, False)
+        pause=self.return_pause()
+    
+        if pause==False:
+            instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
 
     def run(self,current_state):
         while self.running:
@@ -95,10 +102,6 @@ class Ecran:
     def update_pause(self, pause,instance_jeu):
         global global_pause
         global_pause = pause  # Mettre à jour la variable globale
-        # Ajoutez l'événement personnalisé à la file d'attente
-        pygame.event.post(self.event_queue)
-        # Ajoutez l'instance_jeu comme attribut de l'événement
-        self.event_queue.instance_jeu = instance_jeu
 
     def return_pause(self):
         global global_pause
