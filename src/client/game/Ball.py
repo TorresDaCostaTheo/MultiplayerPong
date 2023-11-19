@@ -33,12 +33,15 @@ class Ball:
 
         if self.posx <= 0 and self.firstTime:
             self.firstTime = 0
+            self.xFac *= -1  # Invert the direction only during the first time
             return 1
         elif self.posx >= WIDTH and self.firstTime:
             self.firstTime = 0
+            self.xFac *= -1  # Invert the direction only during the first time
             return -1
         else:
             return 0
+
 
     def reset(self):
         self.posx = WIDTH // 2
