@@ -1,0 +1,4 @@
+boardSize :
+  xSize: 600
+  ySize: 900
+win_score: 5
