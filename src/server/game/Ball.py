@@ -41,4 +41,4 @@ class Ball:
     def point(self):
         return self.__point
     def __str__(self):
-        return f'{{"ball:":{{"coordX":{self.point.x},"coordY":{self.point.y},"speed":{self.speed}}}}}'
+        return f'{{"ball":{{"coordX":{self.point.x},"coordY":{self.point.y},"speed":{self.speed}}}}}'

@@ -1,6 +1,7 @@
 
 from calendar import c
 from enum import Enum
+import json
 import threading
 from time import sleep
 from unittest.mock import call
@@ -31,12 +32,14 @@ class Game(threading.Thread):
         """_summary_ Method to start the game
         """
     def starting(self):
-        self.__ball = Ball(Point(100,100),3)
+        self.__ball = Ball(Point(100,100),1)
         self.__board = GameBoard(self.__players,self.__ball,self.__frameSecond)
         dimension =  round(self.__board.board.point1.x * 0.8)
         for player in self.__players:
             player.striker.defineRectangle(Point(0+dimension,10),Point(0+dimension+10,60))
         self.__state = State.STARTED
+        #self.__callback(f'{{"game":{{"start":{True}}}}}')
+        sleep((2*self.__frameSecond)/self.__frameSecond)
         print("Game started")
     
     def waiting(self):
@@ -71,8 +74,7 @@ class Game(threading.Thread):
             if self.__state == State.STARTED:
                 playerWinner = self.startGame()
                 self.__board.moveBall()
-                with self.__lock:
-                    self.__callback(self.__ball.__str__())
+                self.__callback(f'{{"ball":{{"coordX":"{self.__ball.coordX}","coordY":"{self.__ball.coordY}"}}}}')
             if self.__state == State.PAUSE:
                 pass
             sleep(1/self.__frameSecond)
@@ -83,22 +85,19 @@ class Game(threading.Thread):
     """
     def end(self,reason:str,player:Player)->bool:
         if(reason == "kick"):
-            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","kick":{True}}}}}')
+            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","kick":"{True}"}}}}')
             pass
         elif(reason == "win"):
-            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","win":{True}}}}}')
+            self.__callback(f'{{"player":{{"namePlayer":"{player.name}","win":"{True}"}}}}')
             print(player.name+" win the game")
         return True
     def joinPlayer(self,player:Player):
         with self.__lock:
             if self.__players.__len__() > 2:
-                self.__callback(f'{{"receiver":{player.address},"player":{{"namePlayer":"{player.name}","join":{False}}}}}')
+                self.__callback(f'{{"receiver":"{player.address}","player":{{"namePlayer":"{player.name}","join":"{False.__str__()}","state":"{self.__state.__str__()}"}}}}')
                 return False
             else:
-                print(player.name + " join the game "+str(self.__players.__len__() + 1))
-                if(self.__players.__len__() > 1):
-                    pass
-                    self.__callback(f'{{"receiver":{self.__players[0].address},"player":{{"namePlayer":"{self.__players[0].name}","join":{True}}}}}')
+                self.__callback(f'{{"receiver":"{player.address}","player":{{"namePlayer":"{player.name}","join":"{True.__str__()}","state":"{self.__state.__str__()}"}}}}')
                 self.__players.append(player)
                 return True
     def quit(self,id:int):

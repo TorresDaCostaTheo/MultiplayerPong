@@ -57,30 +57,26 @@ class ServerGameSocket(threading.Thread):
                 break
             sleep(0.5)
     
-    def handleSendMessage(self):
-        for client_socket in self.__clients_socket:
-            client_socket.send(self.__game.__str__().encode())
-        pass
     def remove_socket(self,socket:socket.socket):
         self.__clients_socket.remove(socket)
         pass
-    def handleCallback(self,data:Any):
+    
+    def handleCallback(self,data):
         try:
+            # Decode the bytes to a string
             print(data)
-            message =json.loads(data)
-        
+            message = json.loads(data)
             if("receiver" in message):
-                for client_socket in self.__clients_socket:
-                    print(client_socket.getpeername().__str__())
-                    if(message["receiver"] == client_socket.getpeername().__str__()):
-                        del message["receiver"]
-                        client_socket.sendall(json.dumps(message).encode())
+                for client_thread in self.__clients_thread:
+                    print({message['receiver'].__str__()} == {client_thread.address.__str__()})
+                    if(message['receiver'].__str__() == client_thread.address.__str__()):
+                        client_thread.send(json.dumps(message).encode())
+                        break
             else:
-                for client_socket in self.__clients_socket:
-                    client_socket.sendall(json.dumps(message).encode())
-            pass
-        except:
-            print("Error while sending message")
+                for client_thread in self.__clients_socket:
+                    client_thread.sendall(json.dumps(message).encode())
+        except Exception as e:
+            print("Error while sending message \n"+str(e))
     @property
     def clients_thread(self):
         return self.__clients_thread
@@ -111,15 +107,16 @@ class ClientGameThread(threading.Thread):
                 print(f"Error while receiving data from client \n {e}")
                 self.quit()
             sleep(0.1)
-        print("Ending client thread for ",self.__address)
-    def send(self,data:Any):
-        message ={
-            "responseRequest": data
-        }
-        self.__socket.sendall(json.dumps(message).encode())
+    
+    def send(self,data):
+        try:
+            self.__socket.send(data)
+        except socket.error as exc:
+            print(f"Error while sending data to client \n {exc}")
+            
     def handleMessage(self,data):
-        print(data)
-        if data is None:
+        print("receive data :"+data)
+        if data is None:    
             return
         try:
             decodeData =self.decodeJSON(data)
@@ -136,19 +133,14 @@ class ClientGameThread(threading.Thread):
                     name:str = decodeData['player']['namePlayer']
                     self.__id = self.attributeId()
                     player = Player(self.__id,name,self.__address)
-                    for playerGame in self.__server.game.players:
-                        if(self.__address == playerGame.address):
-                            self.send(False)
-                            return
-                    if(self.__server.game.joinPlayer(player)):
-                        self.send(True)
-                    print(player.__str__())
+                    self.__server.game.joinPlayer(player)
     def isQuitTag(self,decodeData):
-        if decodeData[EnumPlayerKey.PLAYER] is not None:
-            if(decodeData[EnumPlayerKey.PLAYER]['quit'] == True):
-                id:int = decodeData[EnumPlayerKey]['id']
+        if decodeData["player"] is not None:
+            if(decodeData['player']['quit'] == True and decodeData['player']['id'] is not None):
+                print("quit")
+                id:int = decodeData['player']['id']
                 self.__server.game.quit(id)
-        pass
+        
     def isMoveTag(self,decodeData):
         if decodeData['player'] is not None:
             if(decodeData['player']['move']):
@@ -177,3 +169,6 @@ class ClientGameThread(threading.Thread):
                 else:
                     id+=1
         return -1
+    @property
+    def address(self):
+        return self.__address
