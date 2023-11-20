@@ -20,74 +20,74 @@ class Ecran:
         self.menu_title = new_title
         self.menu.set_title(new_title)
 
-    def setup_menus_attente(self, instance_jeu):
+    def setup_menus_attente(self, instance_jeu,BallImage):
         self.menu.clear()
         # Ajoutez du contenu au menu
         self.menu.add.label('Attente du second joueur', font_size=20, margin=(0, 20))
 
         name_player2=self.return_nom_joueur2()
         if name_player2 != "":
-            instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
+            instance_jeu.partie(0, 0, BallImage)
 
-    def setup_menus_pause(self, instance_jeu):
+    def setup_menus_pause(self, instance_jeu,BallImage):
         self.menu.clear()
         # Ajoutez du contenu au menu
         self.menu.add.label('Le jeu est en pause', font_size=20, margin=(0, 20))
 
         # Ajoutez des boutons au menu
-        self.menu.add.button('Reprendre le jeu',lambda:self.display_pause(instance_jeu))
+        self.menu.add.button('Reprendre le jeu',lambda:self.display_pause(instance_jeu,BallImage))
 
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
 
-    def display_pause(self,instance_jeu):
+    def display_pause(self,instance_jeu,BallImage):
         self.joueur.send_data_game(self.joueur.username, instance_jeu.player1YFac, False)
         self.set_menu_title("Attente")
-        self.setup_verification_pause(instance_jeu)
-        self.run("attente pause")
+        self.setup_verification_pause(instance_jeu,BallImage)
+        self.run("attente pause",BallImage)
 
-    def setup_verification_pause(self,instance_jeu):
+    def setup_verification_pause(self,instance_jeu,BallImage):
         self.menu.clear()
         pause=self.return_pause()
     
         if pause==False:
-            instance_jeu.partie(instance_jeu.player1Score, instance_jeu.player2Score, "./src/asset/Balles/jo.png")
+            instance_jeu.partie(instance_jeu.player1Score, instance_jeu.player2Score, BallImage)
 
-    def setup_menus_fin(self, instance_jeu,winner):
+    def setup_menus_fin(self, instance_jeu,winner,BallImage):
         self.menu.clear()
         # Ajoutez du contenu au menu
         self.menu.add.label('Fin du jeu', font_size=20, margin=(0, 20))
         self.menu.add.label('Le joueur {} a gagné'.format(winner), font_size=20, margin=(0, 20))
-        self.menu.add.button('Recommencer une partie',lambda:self.display_fin(instance_jeu))
+        self.menu.add.button('Recommencer une partie',lambda:self.display_fin(instance_jeu,BallImage))
         self.menu.add.button('Quitter le jeu', pygame_menu.events.EXIT)
     
 
-    def display_fin(self,instance_jeu):
+    def display_fin(self,instance_jeu,BallImage):
         self.joueur.send_data_game(self.joueur.username, instance_jeu.player1YFac, False)
         self.set_menu_title("Attente")
-        self.setup_verification_fin(instance_jeu)
-        self.run("attente fin")
+        self.setup_verification_fin(instance_jeu,BallImage)
+        self.run("attente fin", BallImage)
 
-    def setup_verification_fin(self,instance_jeu):
+    def setup_verification_fin(self,instance_jeu,BallImage):
         self.menu.clear()
         pause=self.return_pause()
     
         if pause==False:
-            instance_jeu.partie(0, 0, "./src/asset/Balles/jo.png")
+            instance_jeu.partie(0, 0, BallImage)
 
-    def run(self,current_state):
+    def run(self,current_state,BallImage):
         while self.running:
             # Traitement de la file d'attente des événements personnalisés
             events=pygame.event.get()
             for event in events:
                 if current_state == "attente":
                     if event.type == USEREVENT:
-                        self.setup_menus_attente(event.instance_jeu)
+                        self.setup_menus_attente(event.instance_jeu,BallImage)
                 if current_state == "attente pause":
                     if event.type == USEREVENT:
-                        self.setup_verification_pause(event.instance_jeu)
+                        self.setup_verification_pause(event.instance_jeu,BallImage)
                 if current_state == "attente fin":
                     if event.type == USEREVENT:
-                        self.setup_verification_fin(event.instance_jeu)
+                        self.setup_verification_fin(event.instance_jeu,BallImage)
                 if current_state != "attente" and current_state != "attente pause" and current_state != "attente fin":
                         if event.type == pygame.QUIT:
                             self.running=False
