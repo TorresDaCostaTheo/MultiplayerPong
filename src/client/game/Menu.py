@@ -21,7 +21,7 @@ class MainMenu:
         self.menu.add.selector('Choisissez votre balle :', [('Joan', 1), ('Mounira', 2)], onchange=self.set_ball)
         self.menu.add.text_input('Nom :', default='', onchange=self.NameValue)
         self.menu.add.text_input('Serveur :', default='', onchange=self.ServerValue)
-        self.menu.add.text_input('Port :', default='', onchange=self.PortValue)
+        self.menu.add.text_input('Port :', default='', valid_chars=[0,1,2,3,4,5,6,7,8,9], onchange=self.PortValue)
 
         self.menu.add.button('Jouer', self.start_the_game)
         self.menu.add.button('Quitter', pygame_menu.events.EXIT)

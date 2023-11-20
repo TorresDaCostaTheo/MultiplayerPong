@@ -56,6 +56,10 @@ class Game:
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self,BallImage)
                         ecran.run("pause",BallImage)
+                    if event.key == pygame.K_c:
+                        self.rotate_ball = True
+                    if event.key == pygame.K_v:
+                        self.rotate_ball = False
                     
                 
                 if self.pause==True:
