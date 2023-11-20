@@ -33,7 +33,7 @@ class MainMenu:
         self.joueur.connect()
 
     def callBack(self, message):
-        print(message)
+        #print(message)
         try:
             data = json.loads(message)
 
@@ -45,24 +45,19 @@ class MainMenu:
                     self.nom_joueur2 = temp
                 
                     if self.playerInput != self.nom_joueur2:
-
+                        pause = joueur.get("pause", "")
                         if self.ecran:
                             self.ecran.update_nom_joueur2(self.nom_joueur2,self.game)
+                            self.ecran.update_pause(pause,self.game)
     
                         if self.game:
                             playerYFac_str = joueur.get("playerYFac", "")
-                            pause = joueur.get("pause", "")
                         
                             playerYFac = int(playerYFac_str) if playerYFac_str else 0
 
                             self.game.update_player_name2(self.nom_joueur2)
                             self.game.update_player_fac2(playerYFac)
                             self.game.update_pause(pause)
-
-                        if self.ecran and self.game:
-                            coordX = joueur.get("coordX", "")
-                            coordY = joueur.get("coordY", "")
-                            speed = joueur.get("speed", "")
 
             if 'ball' in data:
                 ball = data['ball']
@@ -91,7 +86,7 @@ class MainMenu:
             self.game.partie(0, 0, self.BallImagePath)
         else:
             self.ecran.set_menu_title("Attente")
-            self.ecran.setup_menus_Attente(self.game)
+            self.ecran.setup_menus_attente(self.game)
             self.ecran.run("attente")
 
     def NameValue(self, name):

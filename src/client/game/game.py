@@ -32,6 +32,8 @@ class Game:
         self.player1Score = player1Score
         self.player2Score = player2Score
         
+        ball.reset_firstime()
+        
 
         while running:
             self.screen.fill(BLACK)
@@ -57,6 +59,7 @@ class Game:
                     
                 
                 if self.pause==True:
+                        self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                         ecran.set_menu_title('Pause')
                         ecran.setup_menus_pause(self)
                         ecran.run("pause")
@@ -94,10 +97,19 @@ class Game:
                 self.joueur.send_data_game(self.joueur.username,self.player1YFac,self.pause)
                 self.last_send_time = current_time
 
-            if self.player1Score == 10 or self.player2Score == 10:
+            if self.player1Score == 10:
+                self.pause=True
+                self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                 ecran.set_menu_title('Fin')
-                ecran.setup_menus_fin(self)
+                ecran.setup_menus_fin(self,self.player1_name)
                 ecran.run("fin")
+            elif self.player2Score ==10:
+                self.pause=True
+                self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
+                ecran.set_menu_title('Fin')
+                ecran.setup_menus_fin(self,self.player2_name)
+                ecran.run("fin")
+
                 
             pygame.display.update()
             self.clock.tick(FPS)
@@ -105,9 +117,6 @@ class Game:
     def update_player_name2(self, player2_name):
         if self.player2_name == "":
             self.player2_name = player2_name
-
-    def update_player_score2(self, player2Score):
-        self.player2Score = player2Score
 
     def update_player_fac2(self, player2YFac):
         self.player2YFac = player2YFac

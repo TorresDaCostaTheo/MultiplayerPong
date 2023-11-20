@@ -11,7 +11,7 @@ class Ball:
         self.radius = radius
         self.speed = 8
         self.color = color
-        self.xFac = 1
+        self.xFac = -1
         self.yFac = -1
         self.image = pygame.image.load(BallImagePath)
         self.image = pygame.transform.scale(self.image, (2 * self.radius, 2 * self.radius))
@@ -40,13 +40,24 @@ class Ball:
         else:
             return 0
 
+
+
     def reset(self):
         self.posx = WIDTH // 2
         self.posy = HEIGHT // 2
-        self.xFac *= -1
+        self.xFac = -1
         self.firstTime = 1
         self.speed = 8
         self.rect.center = (self.posx, self.posy)
+
+    def reset_firstime(self):
+        self.posx = WIDTH // 2
+        self.posy = HEIGHT // 2
+        self.xFac = -1  # Changez cette ligne pour définir la direction initiale vers la gauche
+        self.firstTime = 1
+        self.speed = 8
+        self.rect.center = (self.posx, self.posy)
+
 
     def hit(self):
         self.xFac *= -1
