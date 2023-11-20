@@ -69,10 +69,9 @@ class MainMenu:
                     #self.ball.update_ball(coordX,coordY,speed)
 
 
-        except json.JSONDecodeError as e:
-            print("Erreur lors du décodage du message JSON:", e)
-        except Exception as ex:
-            print("Une erreur s'est produite lors de la gestion du message:", ex)
+        except Exception as e:
+        # Optionally, you can handle the exception here or simply pass
+            pass
 
 
     def start_the_game(self):

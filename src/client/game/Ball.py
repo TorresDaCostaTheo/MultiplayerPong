@@ -50,14 +50,6 @@ class Ball:
         self.speed = 8
         self.rect.center = (self.posx, self.posy)
 
-    def reset_firstime(self):
-        self.posx = WIDTH // 2
-        self.posy = HEIGHT // 2
-        self.xFac = -1  # Changez cette ligne pour définir la direction initiale vers la gauche
-        self.firstTime = 1
-        self.speed = 8
-        self.rect.center = (self.posx, self.posy)
-
 
     def hit(self):
         self.xFac *= -1
