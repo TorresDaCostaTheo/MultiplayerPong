@@ -32,6 +32,8 @@ class Game:
         self.player1Score = player1Score
         self.player2Score = player2Score
         
+        ball.reset()
+        
 
         while running:
             self.screen.fill(BLACK)
