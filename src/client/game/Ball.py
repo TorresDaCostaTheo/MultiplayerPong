@@ -28,8 +28,7 @@ class Ball:
         # Mise à jour de la position du rectangle
         self.rect.center = (self.posx, self.posy)
 
-        if self.posy <= 0 or self.posy 
-        = HEIGHT:
+        if self.posy <= 0 or self.posy >= HEIGHT:
             self.yFac *= -1
 
         if self.posx <= 0 and self.firstTime:
@@ -42,6 +41,7 @@ class Ball:
             return -1
         else:
             return 0
+
 
 
 
