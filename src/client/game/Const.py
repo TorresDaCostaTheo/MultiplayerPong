@@ -19,3 +19,5 @@ StrikerGaucheImagePath = "./src/asset/Strikers/mainGauche.png"
 clock = pygame.time.Clock() 
 FPS = 60
 
+pygame_icon = pygame.image.load('./src/asset/InstaPongLogo.png')
+pygame.display.set_icon(pygame_icon)

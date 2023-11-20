@@ -46,7 +46,7 @@ class Ball:
     def reset(self):
         self.posx = WIDTH // 2
         self.posy = HEIGHT // 2
-        self.xFac = 1
+        self.xFac = -1
         self.firstTime = 1
         self.speed = 8
         self.rect.center = (self.posx, self.posy)
