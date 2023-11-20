@@ -54,15 +54,15 @@ class Game:
                         self.pause=True
                         self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                         ecran.set_menu_title('Pause')
-                        ecran.setup_menus_pause(self)
-                        ecran.run("pause")
+                        ecran.setup_menus_pause(self,BallImage)
+                        ecran.run("pause",BallImage)
                     
                 
                 if self.pause==True:
                         self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                         ecran.set_menu_title('Pause')
-                        ecran.setup_menus_pause(self)
-                        ecran.run("pause")
+                        ecran.setup_menus_pause(self,BallImage)
+                        ecran.run("pause",BallImage)
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
@@ -101,14 +101,14 @@ class Game:
                 self.pause=True
                 self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                 ecran.set_menu_title('Fin')
-                ecran.setup_menus_fin(self,self.player1_name)
-                ecran.run("fin")
+                ecran.setup_menus_fin(self,self.player1_name,BallImage)
+                ecran.run("fin",BallImage)
             elif self.player2Score ==10:
                 self.pause=True
                 self.joueur.send_data_game(self.joueur.username, self.player1YFac,self.pause)
                 ecran.set_menu_title('Fin')
-                ecran.setup_menus_fin(self,self.player2_name)
-                ecran.run("fin")
+                ecran.setup_menus_fin(self,self.player2_name,BallImage)
+                ecran.run("fin",BallImage)
 
                 
             pygame.display.update()
