@@ -86,7 +86,7 @@ class MainMenu:
             self.game.partie(0, 0, self.BallImagePath)
         else:
             self.ecran.set_menu_title("Attente")
-            self.ecran.setup_menus_Attente(self.game)
+            self.ecran.setup_menus_attente(self.game)
             self.ecran.run("attente")
 
     def NameValue(self, name):
